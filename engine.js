@@ -211,14 +211,14 @@ module.exports = function(options) {
         // parentheses are only needed when a scope is present
         var scope = answers.scope ? '(' + answers.scope + ')' : '';
 
-        //
-        var jiraId = answers.jiraId ? 'DBCCNCE-' + answers.jiraId : '';
-
         // Hard limit this line in the validate
         var head = answers.type + scope + ': ' + answers.subject;
 
         // Wrap these lines at options.maxLineWidth characters
         var body = answers.body ? wrap(answers.body, wrapOptions) : false;
+
+        // JiraId
+        var jiraId = answers.jiraId ? 'DBCCNCE-' + answers.jiraId : '';
 
 
         // Apply breaking change prefix, removing it if already present
@@ -230,7 +230,7 @@ module.exports = function(options) {
 
        // var issues = answers.issues ? wrap(answers.issues, wrapOptions) : false;
 
-        commit(filter([head, jiraId, body]).join(' '));
+        commit(filter([head, body, jiraId]).join(' '));
       });
     }
   };
