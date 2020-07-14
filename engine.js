@@ -79,9 +79,9 @@ module.exports = function(options) {
           type: 'input',
           name: 'jiraId',
           message: 'Add jira id (e.g. "3456".):\n',
-          when: function(answers) {
-            return answers.isIssueAffected;
-          },
+         // when: function(answers) {
+         //   return answers.isIssueAffected;
+          //},
           default: undefined
         },
         /*
