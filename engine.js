@@ -202,7 +202,7 @@ module.exports = function(options) {
         };
 
         // parentheses are only needed when a scope is present
-        var jiraId = answers.jiraId ? '(' + answers.jiraId + ')' : '';
+        var jiraId = answers.jiraId ? '(DBCCNCE-' + answers.jiraId + ')' : '';
 
         // Hard limit this line in the validate
         var head = answers.type + jiraId + ': ' + answers.subject;
