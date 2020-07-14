@@ -79,6 +79,9 @@ module.exports = function(options) {
           type: 'input',
           name: 'jiraId',
           message: 'Add jira id (e.g. "3456".):\n',
+          transformer: function(subject, answers) {
+            return 'DBCCNCE-' + subject;
+          },
          // when: function(answers) {
          //   return answers.isIssueAffected;
           //},
