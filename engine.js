@@ -77,6 +77,18 @@ module.exports = function(options) {
         },
         {
           type: 'input',
+          name: 'scope',
+          message:
+            'What is the scope of this change (e.g. component or file name): (press enter to skip)',
+          default: options.defaultScope,
+          filter: function(value) {
+            return options.disableScopeLowerCase
+              ? value.trim()
+              : value.trim().toLowerCase();
+          }
+        },
+        {
+          type: 'input',
           name: 'jiraId',
           message: 'Add jira id (e.g. "3456".):\n',
           transformer: function(subject, answers) {
@@ -87,19 +99,6 @@ module.exports = function(options) {
           //},
           default: undefined
         },
-        /*
-        {
-          type: 'input',
-          name: 'scope',
-          message:
-            'What is the scope of this change (e.g. component or file name): (press enter to skip)',
-          default: options.defaultScope,
-          filter: function(value) {
-            return options.disableScopeLowerCase
-              ? value.trim()
-              : value.trim().toLowerCase();
-          }
-        },*/
         {
           type: 'input',
           name: 'subject',
@@ -141,8 +140,7 @@ module.exports = function(options) {
           message:
             'Provide a longer description of the change: (press enter to skip)\n',
           default: options.defaultBody
-        },
-        /*
+        }/*,
         {
           type: 'confirm',
           name: 'isBreaking',
@@ -191,7 +189,16 @@ module.exports = function(options) {
               answers.isIssueAffected && !answers.body && !answers.breakingBody
             );
           }
-        },*/
+        },
+        {
+          type: 'input',
+          name: 'issues',
+          message: 'Add issue references (e.g. "fix #123", "re #123".):\n',
+          when: function(answers) {
+            return answers.isIssueAffected;
+          },
+          default: options.defaultIssues ? options.defaultIssues : undefined
+        }*/
       ]).then(function(answers) {
         var wrapOptions = {
           trim: true,
@@ -202,24 +209,28 @@ module.exports = function(options) {
         };
 
         // parentheses are only needed when a scope is present
-        var jiraId = answers.jiraId ? '(DBCCNCE-' + answers.jiraId + ')' : '';
+        var scope = answers.scope ? '(' + answers.scope + ')' : '';
+
+        //
+        var jiraId = answers.jiraId ? 'DBCCNCE-' + answers.jiraId : '';
 
         // Hard limit this line in the validate
-        var head = answers.type + jiraId + ': ' + answers.subject;
+        var head = answers.type + scope + ': ' + answers.subject;
 
         // Wrap these lines at options.maxLineWidth characters
         var body = answers.body ? wrap(answers.body, wrapOptions) : false;
 
+
         // Apply breaking change prefix, removing it if already present
-        //var breaking = answers.breaking ? answers.breaking.trim() : '';
-        //breaking = breaking
-        //  ? 'BREAKING CHANGE: ' + breaking.replace(/^BREAKING CHANGE: /, '')
-        //  : '';
-        //breaking = breaking ? wrap(breaking, wrapOptions) : false;
+       // var breaking = answers.breaking ? answers.breaking.trim() : '';
+       // breaking = breaking
+       //   ? 'BREAKING CHANGE: ' + breaking.replace(/^BREAKING CHANGE: /, '')
+       //   : '';
+       // breaking = breaking ? wrap(breaking, wrapOptions) : false;
 
-        //var issues = answers.issues ? wrap(answers.issues, wrapOptions) : false;
+       // var issues = answers.issues ? wrap(answers.issues, wrapOptions) : false;
 
-        commit(filter([head, body]).join(' '));
+        commit(filter([head, jiraId, body]).join(' '));
       });
     }
   };
