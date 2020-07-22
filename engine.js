@@ -218,8 +218,7 @@ module.exports = function(options) {
         var body = answers.body ? wrap(answers.body, wrapOptions) : false;
 
         // JiraId
-        var jiraId = answers.jiraId ? 'DBCCNCE-' + answers.jiraId : 'GENERAL';
-
+        var jiraId = answers.jiraId ? 'DBCCNCE-' + answers.jiraId : 'DBCCNCE-GENERAL';
 
         // Apply breaking change prefix, removing it if already present
        // var breaking = answers.breaking ? answers.breaking.trim() : '';
